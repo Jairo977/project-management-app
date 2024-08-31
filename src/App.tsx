@@ -1,26 +1,12 @@
+// src/App.tsx
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ProjectListContainer from './components/ProjectListContainer'; // Asegúrate de que la ruta es correcta
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: React.FC = () => (
+  <div>
+    <h1>Lista de Proyectos</h1>
+    <ProjectListContainer />
+  </div>
+);
 
 export default App;

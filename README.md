@@ -1,68 +1,92 @@
 # Project Management App
 
-Esta es una aplicación web para la gestión de proyectos, tareas y empleados, desarrollada con React, TypeScript y PrimeReact. La aplicación permite a los usuarios gestionar proyectos, asignar tareas, y administrar la información de los empleados.
+Este es un proyecto de gestión de proyectos y tareas desarrollado con **React**, **TypeScript**, y **PrimeReact**. La aplicación permite a los usuarios gestionar proyectos, tareas y empleados dentro de una empresa.
 
-## Tabla de Contenidos
+## Características
 
-- [Descripción del Proyecto](#descripción-del-proyecto)
-- [Requisitos Previos](#requisitos-previos)
-- [Instalación](#instalación)
-- [Ejecución](#ejecución)
-- [Despliegue](#despliegue)
-- [Ejemplos de Uso de la API](#ejemplos-de-uso-de-la-api)
-- [Capturas de Pantalla](#capturas-de-pantalla)
-- [Video de la Aplicación](#video-de-la-aplicación)
-- [Contribuciones](#contribuciones)
-- [Contacto](#contacto)
-
-## Descripción del Proyecto
-
-La aplicación de gestión de proyectos permite crear y gestionar proyectos, asignar tareas a empleados, y realizar un seguimiento del progreso. Las características incluyen:
-
-- Gestión de proyectos.
-- Gestión de tareas con asignación a empleados.
-- Visualización de tareas y proyectos en una interfaz intuitiva.
-- Funcionalidades CRUD (Crear, Leer, Actualizar, Eliminar) para proyectos, tareas y empleados.
-
-## Requisitos Previos
-
-- Node.js (v14 o superior)
-- npm (v6 o superior)
+- **Gestión de Proyectos:** Visualiza y administra una lista de proyectos.
+- **Gestión de Tareas:** Crea, edita, elimina y lista tareas asociadas a proyectos y empleados.
+- **Gestión de Empleados:** Visualiza una lista de empleados disponibles para asignar a las tareas.
+- **API REST:** Consume una API REST para gestionar los datos de proyectos, tareas y empleados.
+- **Navegación:** Navega entre las secciones de la aplicación utilizando `react-router-dom`.
+- **PrimeReact:** Interfaz de usuario enriquecida utilizando componentes de PrimeReact.
+- **Responsividad:** La aplicación es responsiva y mantiene una experiencia de usuario consistente en diferentes dispositivos y tamaños de pantalla.
 
 ## Instalación
 
-1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/project-management-app.git
-   cd project-management-app
-Instala las dependencias:
+Sigue los pasos a continuación para instalar y ejecutar la aplicación localmente.
+
+### 1. Clonar el Repositorio
+
+```bash
+git clone https://github.com/Jairo977/project-management-app.git
+2. Navegar al Directorio del Proyecto
+bash
+Copiar código
+cd project-management-app
+3. Instalar Dependencias
+Asegúrate de tener Node.js instalado. Luego, instala las dependencias del proyecto:
+
 bash
 Copiar código
 npm install
-Ejecución
-Inicia la aplicación en modo desarrollo:
+4. Configurar Variables de Entorno
+Crea un archivo .env en la raíz del proyecto y define las variables de entorno necesarias, por ejemplo:
+
+bash
+Copiar código
+REACT_APP_API_URL=https://jsonplaceholder.typicode.com
+5. Ejecutar la Aplicación
 bash
 Copiar código
 npm start
-La aplicación se abrirá automáticamente en tu navegador en http://localhost:3000.
-Despliegue
-Para desplegar la aplicación en un servidor de producción, puedes utilizar servicios como Vercel, Netlify, o Heroku. Asegúrate de configurar las variables de entorno necesarias.
+Esto iniciará la aplicación en modo de desarrollo. Abre http://localhost:3000 para verla en tu navegador.
 
-Ejemplos de Uso de la API
-Obtener Tareas
-bash
+Uso
+Gestión de Proyectos
+Navega a la sección "Gestión de Proyectos".
+Añade un nuevo proyecto usando el formulario.
+Visualiza y gestiona los proyectos existentes.
+Gestión de Tareas
+Navega a la sección "Gestión de Tareas".
+Añade una nueva tarea especificando el proyecto asociado y los empleados asignados.
+Edita o elimina tareas existentes.
+Gestión de Empleados
+Navega a la sección "Gestión de Empleados".
+Visualiza la lista de empleados disponibles.
+Tecnologías Utilizadas
+React
+TypeScript
+PrimeReact
+Axios
+React Router
+CSS
+Contribuciones
+Las contribuciones son bienvenidas. Por favor, sigue los siguientes pasos:
+
+Haz un fork del proyecto.
+Crea una nueva rama (git checkout -b feature/nueva-funcionalidad).
+Realiza los cambios y haz un commit (git commit -m 'Agregar nueva funcionalidad').
+Sube los cambios (git push origin feature/nueva-funcionalidad).
+Abre un Pull Request.
+Licencia
+Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+
+Contacto
+Si tienes alguna pregunta, no dudes en contactarme en tu-email@example.com.
+
+¡Gracias por usar nuestra aplicación de gestión de proyectos y tareas!
+
+markdown
 Copiar código
-curl -X GET http://localhost:3001/api/tasks
-Crear una Nueva Tarea
-bash
-Copiar código
-curl -X POST http://localhost:3001/api/tasks -H "Content-Type: application/json" -d '{"title": "Nueva Tarea", "projectId": 1, "employeeIds": [1, 2]}'
-Actualizar una Tarea
-bash
-Copiar código
-curl -X PUT http://localhost:3001/api/tasks/1 -H "Content-Type: application/json" -d '{"title": "Tarea Actualizada", "projectId": 1, "employeeIds": [1]}'
-Eliminar una Tarea
-bash
-Copiar código
-curl -X DELETE http://localhost:3001/api/tasks/1
-Capturas de Pantalla
+
+### Instrucciones para Usarlo:
+
+1. **Copia el contenido** y crea un archivo llamado `README.md` en la raíz de tu proyecto.
+2. **Personaliza** cualquier sección según sea necesario, especialmente los detalles de instalación y configuración.
+3. **Sube el archivo** al repositorio de GitHub:
+
+   ```bash
+   git add README.md
+   git commit -m "Agregar archivo README.md"
+   git push origin main

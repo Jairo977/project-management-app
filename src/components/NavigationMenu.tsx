@@ -1,14 +1,18 @@
+// src/components/NavigationMenu.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './NavigationMenu.css';  // Importa el archivo CSS
 
 const NavigationMenu: React.FC = () => {
   return (
-    <nav>
+    <nav className="navigation-menu">
       <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/tasks">Gestión de Tareas</Link></li>
-        <li><Link to="/projects">Gestión de Proyectos</Link></li>
-        <li><Link to="/employees">Gestión de Empleados</Link></li>
+        <li>
+          <Link to="/">Inicio</Link>
+        </li>
+        <li>
+          <Link to="/tasks">Gestión de Tareas</Link>
+        </li>
       </ul>
     </nav>
   );

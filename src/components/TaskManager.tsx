@@ -1,97 +1,124 @@
-import React, { useEffect, useState } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
+import React, { useState, useEffect } from 'react';
 import { Dropdown } from 'primereact/dropdown';
-import { fetchTasks, createTask, updateTask, deleteTask, fetchProjects, fetchEmployees } from '../services/api';
-import { AxiosResponse } from 'axios';
-
-interface Task {
-  id: number;
-  name: string;
-  projectId: number;
-  employeeIds: number[];
-}
-
-interface Project {
-  id: number;
-  name: string;
-}
-
-interface Employee {
-  id: number;
-  name: string;
-}
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { Task, Project, Employee } from '../types';
+import { fetchTasks, fetchProjects, fetchEmpleados, createTask, updateTask, deleteTask } from '../services/api';
+import './TaskManager.css';
 
 const TaskManager: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [employees, setEmployees] = useState<Employee[]>([]);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [empleados, setEmpleados] = useState<Employee[]>([]);
+    const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [selectedEmpleados, setSelectedEmpleados] = useState<Employee[]>([]);
+    const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetchTasks().then((response: AxiosResponse<Task[]>) => setTasks(response.data));
-    fetchProjects().then((response: AxiosResponse<Project[]>) => setProjects(response.data));
-    fetchEmployees().then((response: AxiosResponse<Employee[]>) => setEmployees(response.data));
-  }, []);
+    useEffect(() => {
+        fetchTasks().then((response: { data: Task[] }) => setTasks(response.data));
+        fetchProjects().then((response: { data: Project[] }) => setProjects(response.data));
+        fetchEmpleados().then((response: { data: Employee[] }) => setEmpleados(response.data));
+    }, []);
 
-  const openNewTaskDialog = () => {
-    setSelectedTask({ id: 0, name: '', projectId: 0, employeeIds: [] });
-    setIsDialogVisible(true);
-  };
+    const handleCreateTask = () => {
+        if (!newTaskTitle || !selectedProject) return;
 
-  const saveTask = () => {
-    if (selectedTask?.id) {
-      updateTask(selectedTask).then(() => {
-        setTasks(tasks.map(t => (t.id === selectedTask.id ? selectedTask : t)));
-      });
-    } else {
-      createTask(selectedTask!).then((response: AxiosResponse<Task>) => {
-        setTasks([...tasks, response.data]);
-      });
-    }
-    setIsDialogVisible(false);
-  };
+        const newTask: Task = {
+            id: Date.now(),
+            title: newTaskTitle,
+            projectId: selectedProject.id,
+            employeeIds: selectedEmpleados.map(emp => emp.id),
+            completed: false,
+        };
 
-  const deleteSelectedTask = () => {
-    if (selectedTask) {
-      deleteTask(selectedTask.id).then(() => {
-        setTasks(tasks.filter(t => t.id !== selectedTask.id));
-      });
-      setIsDialogVisible(false);
-    }
-  };
+        createTask(newTask).then((response: { data: Task }) => {
+            setTasks([...tasks, response.data]);
+            setNewTaskTitle('');
+            setSelectedProject(null);
+            setSelectedEmpleados([]);
+        });
+    };
 
-  return (
-    <div>
-      <Button label="Nueva Tarea" icon="pi pi-plus" onClick={openNewTaskDialog} />
-      <DataTable value={tasks} selectionMode="single" onSelectionChange={e => setSelectedTask(e.value)}>
-        <Column field="name" header="Nombre"></Column>
-        <Column field="projectId" header="Proyecto" body={(rowData: Task) => projects.find(p => p.id === rowData.projectId)?.name}></Column>
-        <Column header="Empleados" body={(rowData: Task) => rowData.employeeIds.map(id => employees.find(e => e.id === id)?.name).join(', ')}></Column>
-      </DataTable>
+    const handleEditTask = (task: Task) => {
+        setEditingTaskId(task.id);
+        setNewTaskTitle(task.title);
+        setSelectedProject(projects.find(project => project.id === task.projectId) || null);
+        setSelectedEmpleados(empleados.filter(empleado => task.employeeIds?.includes(empleado.id) || false));
+    };
 
-      <Dialog visible={isDialogVisible} onHide={() => setIsDialogVisible(false)}>
-        <div className="p-field">
-          <label htmlFor="name">Nombre de la Tarea</label>
-          <InputText id="name" value={selectedTask?.name} onChange={e => setSelectedTask({ ...selectedTask!, name: e.target.value })} />
+    const handleSaveTask = () => {
+        if (editingTaskId === null || !newTaskTitle || !selectedProject) return;
+
+        const updatedTask: Task = {
+            id: editingTaskId,
+            title: newTaskTitle,
+            projectId: selectedProject.id,
+            employeeIds: Array.isArray(selectedEmpleados) ? selectedEmpleados.map(emp => emp.id) : [],
+            completed: false,
+        };
+
+        updateTask(updatedTask).then(() => {
+            setTasks(tasks.map(task => (task.id === editingTaskId ? updatedTask : task)));
+            setEditingTaskId(null);
+            setNewTaskTitle('');
+            setSelectedProject(null);
+            setSelectedEmpleados([]);
+        });
+    };
+
+    const handleDeleteTask = (taskId: number) => {
+        deleteTask(taskId).then(() => {
+            setTasks(tasks.filter(task => task.id !== taskId));
+        });
+    };
+
+    return (
+        <div className="task-manager">
+            <h2>Gestión de Tareas</h2>
+            <div className="task-inputs">
+                <InputText
+                    value={newTaskTitle}
+                    onChange={e => setNewTaskTitle(e.target.value)}
+                    placeholder="Título de la nueva tarea"
+                    className="p-inputtext-sm"
+                />
+                <Dropdown
+                    value={selectedProject}
+                    options={projects}
+                    onChange={e => setSelectedProject(e.value)}
+                    optionLabel="name"
+                    placeholder="Selecciona un proyecto"
+                    className="p-dropdown-sm"
+                />
+                <Dropdown
+                    value={selectedEmpleados}
+                    options={empleados}
+                    onChange={e => setSelectedEmpleados(e.value)}
+                    optionLabel="name"
+                    placeholder="Selecciona empleados"
+                    multiple
+                    className="p-dropdown-sm"
+                />
+                <Button
+                    label={editingTaskId ? "Guardar Tarea" : "Agregar Tarea"}
+                    onClick={editingTaskId ? handleSaveTask : handleCreateTask}
+                    className="p-button-sm"
+                />
+            </div>
+            <div className="task-list">
+                {tasks.map(task => (
+                    <div key={task.id} className="task-item">
+                        <strong>{task.title}</strong>
+                        <p>Proyecto: {projects.find(project => project.id === task.projectId)?.name || 'Desconocido'}</p>
+                        <p>Empleados: {task.employeeIds ? empleados.filter(emp => task.employeeIds.includes(emp.id)).map(emp => emp.name).join(', ') : 'Ninguno'}</p>
+                        <Button label="Editar" onClick={() => handleEditTask(task)} className="p-button-sm p-button-info" />
+                        <Button label="Borrar" onClick={() => handleDeleteTask(task.id)} className="p-button-sm p-button-danger" />
+                    </div>
+                ))}
+            </div>
         </div>
-        <div className="p-field">
-          <label htmlFor="project">Proyecto</label>
-          <Dropdown id="project" value={selectedTask?.projectId} options={projects} onChange={e => setSelectedTask({ ...selectedTask!, projectId: e.value })} optionLabel="name" />
-        </div>
-        <div className="p-field">
-          <label htmlFor="employees">Empleados</label>
-          <Dropdown id="employees" value={selectedTask?.employeeIds} options={employees} onChange={e => setSelectedTask({ ...selectedTask!, employeeIds: e.value })} optionLabel="name" multiple />
-        </div>
-        <Button label="Guardar" icon="pi pi-check" onClick={saveTask} />
-        <Button label="Eliminar" icon="pi pi-times" onClick={deleteSelectedTask} />
-      </Dialog>
-    </div>
-  );
+    );
 };
 
 export default TaskManager;

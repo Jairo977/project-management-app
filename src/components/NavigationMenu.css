@@ -1,0 +1,53 @@
+/* src/components/NavigationMenu.css */
+
+.navigation-menu {
+    background-color: #1c1e21; /* Un color oscuro para un estilo moderno */
+    padding: 15px 30px; /* Espaciado interno */
+    border-radius: 10px; /* Esquinas redondeadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+    display: flex;
+    justify-content: space-between; /* Espaciado uniforme entre los elementos */
+    align-items: center;
+    transition: background-color 0.3s ease; /* Transición suave para cambios de fondo */
+}
+
+.navigation-menu:hover {
+    background-color: #292b2e; /* Cambio de color de fondo al pasar el mouse */
+}
+
+.navigation-menu ul {
+    list-style-type: none; /* Sin estilo de lista predeterminado */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 25px; /* Espaciado entre los enlaces */
+}
+
+.navigation-menu li {
+    display: inline;
+}
+
+.navigation-menu a {
+    text-decoration: none; /* Elimina el subrayado predeterminado */
+    color: #370ddf; /* Texto en blanco para un buen contraste */
+    font-weight: 600; /* Hace que el texto sea seminegrita */
+    font-size: 16px;
+    padding: 8px 15px; /* Espaciado interno de los enlaces */
+    border-radius: 5px; /* Esquinas ligeramente redondeadas */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave en color y fondo */
+}
+
+.navigation-menu a:hover {
+    background-color: #ffca28; /* Fondo dorado al pasar el mouse */
+    color: #1c1e21; /* Texto oscuro al pasar el mouse */
+}
+
+.navigation-menu .logo {
+    font-size: 20px; /* Tamaño de fuente del logo */
+    color: #ffffff; /* Color del texto del logo */
+    font-weight: bold; /* El logo en negrita */
+}
+
+.navigation-menu .logo span {
+    color: #ffca28; /* Color dorado para parte del texto del logo */
+}
